@@ -1,0 +1,6 @@
+书籍《虫师selenium python自动化测试》中的学习实例
+
+webdriver的原理：
+1、webdriver启功浏览器并绑定指定端口，该浏览器实例作为web driver的Remote server；
+2、Clint端通过CommandExecuter发送HTTPResquest给remote server监听端口；
+3、Remoteserver需要依赖原生的浏览器组件转化浏览器的native调用。
