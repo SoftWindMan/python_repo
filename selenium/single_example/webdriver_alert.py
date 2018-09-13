@@ -7,6 +7,11 @@ from selenium import webdriver
 import time
 
 url = 'http://www.baidu.com'
+
+# option = webdriver.ChromeOptions()
+# option.add_argument('--headless')
+# driver = webdriver.Chrome(chrome_options=option)
+
 driver = webdriver.Chrome()
 driver.get(url)
 
