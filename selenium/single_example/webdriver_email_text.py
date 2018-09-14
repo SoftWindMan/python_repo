@@ -10,7 +10,7 @@ receiver = '184994562@qq.com'
 smtpserver = 'smtp.163.com'
 
 username = '13240359614@163.com'
-password = 'fengyuleidian95'
+password = '123'
 
 subject = 'python email test.'
 
