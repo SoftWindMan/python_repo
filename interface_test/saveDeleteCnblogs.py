@@ -108,8 +108,3 @@ if __name__ == '__main__':
 		print '获取postId失败。'
 #	deleteCnblogs(s, deleteCnblogsUrl, postId)
 
-
-
-
-
-

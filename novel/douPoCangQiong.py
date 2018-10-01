@@ -72,7 +72,7 @@ def getChapterContent(chapterListArr):
 			for content in soup.find_all('p'):
 				chapterContentArr.append(content.text)
 				
-			if os.path.exists(chapterTitle):
+			if not os.path.exists(chapterTitle):
 				print chapterTitle + ' Downloading...'
 				saveChapterContentToLocal(chapterTitle, chapterContentArr)
 			else:
