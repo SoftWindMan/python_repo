@@ -18,6 +18,7 @@ try:
 	driver.find_element_by_id('su').click()
 	time.sleep(2)
 except:
+ 	# 参数必须是绝对路径
 	driver.get_screenshot_as_file('E:\\error_log.png')
 
 driver.quit()
