@@ -1,0 +1,7 @@
+{% extends "master.html" %}
+
+{% block title %}Home{% endblock %}
+{% block body %}
+<p>hello {{username}}</p>
+<a href="{{ url_for('index') }}"><button>Back to home page</button></a>
+{% endblock %}
