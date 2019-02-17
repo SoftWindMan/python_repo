@@ -1,7 +1,5 @@
-#!/usr/bin/python
 #coding=utf-8
-
-# 斗破苍穹
+""" 小说：斗破苍穹 """
 
 import requests, sys, os
 from bs4 import BeautifulSoup
