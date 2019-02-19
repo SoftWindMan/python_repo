@@ -1,8 +1,9 @@
-#coding = utf-8
+#coding=utf-8
 import os
 from concurrent.futures import ThreadPoolExecutor
-from keepAccount.test.parseHtml import *
+from parseHtml import *
 
+""" 小说下载类 """
 class DownloadNovel:
     def __init__(self, novelName, baseUrl):
         self.baseUrl = baseUrl

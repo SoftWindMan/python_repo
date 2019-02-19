@@ -3,6 +3,7 @@ import requests
 from requests import RequestException
 from pyquery import PyQuery as pq
 
+""" 网页解析类 """
 class ParseHtml:
     # 解析url
     def parse_url(self, url):
@@ -23,12 +24,12 @@ class ParseHtml:
     # 获取网页中标签内容
     def tagtext_from_html(self, response, tagName):
         doc = pq(response)
-        return [tag.text() for tag in doc(tagName).items()]
+        return [tag.text() if not isinstance(tag.text(), unicode) else tag.text().encode('utf-8') for tag in doc(tagName).items()]
 
     # 获取网页中某标签的属性内容
     def attrtext_from_html(self, response, tagName, attrName):
         doc = pq(response)
-        return [tag.attr(attrName) for tag in doc(tagName).items()]
+        return [tag.attr(attrName) if not isinstance(tag.attr(attrName), unicode) else tag.attr(attrName).encode('utf-8') for tag in doc(tagName).items()]
 
 
 

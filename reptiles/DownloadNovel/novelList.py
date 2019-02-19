@@ -1,14 +1,14 @@
 #coding=utf-8
-from keepAccount.test.parseHtml import *
+from parseHtml import *
 from concurrent.futures import ThreadPoolExecutor
-import os
 
-class NovelIndex:
+""" 小说列表类 """
+class NovelList:
     def __init__(self):
         self._baseUrl = 'https://www.x88dushu.com'
         self._parseHtml = ParseHtml()
 
-        self._executor = ThreadPoolExecutor(max_workers=100)
+        self._executor = ThreadPoolExecutor(max_workers=1000)
 
     # 所有小说分类信息
     def all_novel_type_info(self):
@@ -18,12 +18,12 @@ class NovelIndex:
 
         allNovelTypeInfo = []
         for i in range(1, len(allNovelTypeName)):
-            allNovelTypeDict = {}
-            allNovelTypeDict['novelTypeUrl'] = self._baseUrl + allNovelTypeUrl[i]
-            allNovelTypeDict['novelTypeName'] = allNovelTypeName[i]
-
             baseResponse = self._parseHtml.parse_url(self._baseUrl + allNovelTypeUrl[i])
             pages = self._parseHtml.attrtext_from_html(baseResponse, '.pagelink a', 'href')[-1].split('/')[-2]
+
+            allNovelTypeDict = {}
+            allNovelTypeDict['novelTypeUrl'] = self._baseUrl + '/' + allNovelTypeUrl[i].split('/')[1] + '/'
+            allNovelTypeDict['novelTypeName'] = allNovelTypeName[i]
             allNovelTypeDict['pages'] = pages
             allNovelTypeInfo.append(allNovelTypeDict)
         return allNovelTypeInfo
@@ -33,14 +33,14 @@ class NovelIndex:
         allNovelTypeInfo = self.all_novel_type_info()
         for novelTypeInfo in allNovelTypeInfo:
             if novelTypeInfo['novelTypeName'] == novelTypeName:
-                novelTypeUrl = novelTypeInfo['novelTypeUrl']
-                pageUrl = self._baseUrl + '/' + novelTypeUrl.split('/')[-3] + '/' + str(pageIndex)
+                pageUrl = novelTypeInfo['novelTypeUrl'] + str(pageIndex)
                 response = self._parseHtml.parse_url(pageUrl)
-                novelName = self._parseHtml.tagtext_from_html(response, '.booklist .sm')
-                novelAuthor = self._parseHtml.tagtext_from_html(response, '.booklist .zz')
-                novelUrl = self._parseHtml.attrtext_from_html(response, '.booklist a', 'href')
+                novelName = self._parseHtml.tagtext_from_html(response, '.booklist .sm')[1:]
+                novelAuthor = self._parseHtml.tagtext_from_html(response, '.booklist .zz')[1:]
+                novelUrl = self._parseHtml.attrtext_from_html(response, '.booklist .sm a', 'href')
+
                 novelInfo = []
-                for i in range(1, len(novelName)):
+                for i in range(len(novelName)):
                     novelInfoDict = {}
                     novelInfoDict['novelName'] = novelName[i]
                     novelInfoDict['novelAuthor'] = novelAuthor[i]
@@ -60,10 +60,10 @@ class NovelIndex:
                 for i in range(1, pages + 1):
                     pageUrl = self._baseUrl + novelTypeUrl.split('/')[-3] + '/' + str(i)
                     response = self._parseHtml.parse_url(pageUrl)
-                    novelName = self._parseHtml.tagtext_from_html(response, '.booklist .sm')
-                    novelAuthor = self._parseHtml.tagtext_from_html(response, '.booklist .zz')
-                    novelUrl = self._parseHtml.attrtext_from_html(response, '.booklist a', 'href')
-                    for i in range(1, len(novelName)):
+                    novelName = self._parseHtml.tagtext_from_html(response, '.booklist .sm')[1:]
+                    novelAuthor = self._parseHtml.tagtext_from_html(response, '.booklist .zz')[1:]
+                    novelUrl = self._parseHtml.attrtext_from_html(response, '.booklist .sm a', 'href')
+                    for i in range(len(novelName)):
                         novelInfoDict = {}
                         novelInfoDict['novelName'] = novelName[i]
                         novelInfoDict['novelAuthor'] = novelAuthor[i]
@@ -72,6 +72,8 @@ class NovelIndex:
                 return novelInfo
 
 if __name__ == '__main__':
-    novelIndex = NovelIndex()
-    a = novelIndex.one_page_all_novel_under_novel_type_name('恐怖悬疑', 1)
+    novelList = NovelList()
+    a = novelList.one_page_all_novel_under_novel_type_name('玄幻魔法', 1)
+    # a = novelList.all_novel_type_info()
+    print(len(a))
     print(a)
