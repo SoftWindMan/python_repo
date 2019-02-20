@@ -12,7 +12,7 @@ class DownloadNovel:
         self._parseHtml = ParseHtml()
 
     # 保存小说章节内容
-    def download_chapter(self, future):
+    def _download_chapter(self, future):
         response = future.result()
 
         # 获取小说章节标题和章节内容
@@ -42,9 +42,9 @@ class DownloadNovel:
         doc = pq(listResponse)
         chapterUrls = [self.baseUrl + chapterUrl.attr('href') for chapterUrl in doc('.mulu li a').items()]
 
-        executor = ThreadPoolExecutor(max_workers=1000)
+        executor = ThreadPoolExecutor(max_workers=300)
         for chapterUrl in chapterUrls:
-            executor.submit(self._parseHtml.parse_url, chapterUrl).add_done_callback(self.download_chapter)
+            executor.submit(self._parseHtml.parse_url, chapterUrl).add_done_callback(self._download_chapter)
         executor.shutdown()
         print('*** 小说【{}】下载完毕！***'.format(self.novelName))
 

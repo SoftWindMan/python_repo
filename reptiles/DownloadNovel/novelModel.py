@@ -2,16 +2,46 @@
 from parseHtml import *
 from concurrent.futures import ThreadPoolExecutor
 
-""" 小说列表类 """
-class NovelList:
+# 模型类
+class NovelModel:
     def __init__(self):
         self._baseUrl = 'https://www.x88dushu.com'
         self._parseHtml = ParseHtml()
 
-        self._executor = ThreadPoolExecutor(max_workers=1000)
+    # 所有小说类型
+    def all_novel_type_names(self):
+        allNovelTypeNames = self._all_novel_types()
+        newAllNovelTypeNames = []
+        for i in range(len(allNovelTypeNames)):
+            novelTypeName = allNovelTypeNames[i]['novelTypeName']
+            novelTypePages = allNovelTypeNames[i]['novelTypePages']
+            newAllNovelTypeNames.append('【{}】 {} - 共{}页'.format(i, novelTypeName, novelTypePages))
+        return newAllNovelTypeNames
+
+    # 某类某页
+    def single_novels(self, novelTypeNameIndex, pageIndex):
+        novelTypeName = self._all_novel_types()[novelTypeNameIndex]['novelTypeName']
+        novelTypePages = self._all_novel_types()[novelTypeNameIndex]['novelTypePages']
+        singleNovels = self._single_novels_under_novel_type_name(novelTypeName, pageIndex)
+        newSingleNovels = []
+        for singleNovel in singleNovels:
+            newsingleNovelDict = {}
+            newsingleNovelDict['novelName'] = singleNovel['novelName']
+            newsingleNovelDict['novelAuthor'] = singleNovel['novelAuthor']
+            newSingleNovels.append(newsingleNovelDict)
+        newSingleNovels.append(novelTypeName)
+        newSingleNovels.append(novelTypePages)
+        newSingleNovels.append(pageIndex)
+        return newSingleNovels
+
+    # 某类某页某小说
+    def one_novel(self, novelTypeNameIndex, pageIndex, novelIndex):
+        novelTypeName = self._all_novel_types()[novelTypeNameIndex]['novelTypeName']
+        singleNovels = self._single_novels_under_novel_type_name(novelTypeName, pageIndex)
+        return singleNovels[novelIndex]['novelName'], singleNovels[novelIndex]['novelUrl']
 
     # 所有小说分类信息
-    def all_novel_type_info(self):
+    def _all_novel_types(self):
         response = self._parseHtml.parse_url(self._baseUrl)
         allNovelTypeName = self._parseHtml.tagtext_from_html(response, '.nav_l li')
         allNovelTypeUrl = self._parseHtml.attrtext_from_html(response, '.nav_l li a', 'href')
@@ -24,13 +54,13 @@ class NovelList:
             allNovelTypeDict = {}
             allNovelTypeDict['novelTypeUrl'] = self._baseUrl + '/' + allNovelTypeUrl[i].split('/')[1] + '/'
             allNovelTypeDict['novelTypeName'] = allNovelTypeName[i]
-            allNovelTypeDict['pages'] = pages
+            allNovelTypeDict['novelTypePages'] = pages
             allNovelTypeInfo.append(allNovelTypeDict)
         return allNovelTypeInfo
 
-    # 获取某类型小说某页的小说信息
-    def one_page_all_novel_under_novel_type_name(self, novelTypeName, pageIndex):
-        allNovelTypeInfo = self.all_novel_type_info()
+    # 某类某页的所有小说信息
+    def _single_novels_under_novel_type_name(self, novelTypeName, pageIndex):
+        allNovelTypeInfo = self._all_novel_types()
         for novelTypeInfo in allNovelTypeInfo:
             if novelTypeInfo['novelTypeName'] == novelTypeName:
                 pageUrl = novelTypeInfo['novelTypeUrl'] + str(pageIndex)
@@ -49,8 +79,8 @@ class NovelList:
                 return novelInfo
 
     # 获取某小说分类下所有小说信息
-    def all_novel_under_novel_type_name(self, novelTypeName):
-        allNovelTypeInfo = self.all_novel_type_info()
+    def _all_novels_under_novel_type_name(self, novelTypeName):
+        allNovelTypeInfo = self._all_novel_types()
         for novelTypeInfo in allNovelTypeInfo:
             if novelTypeInfo['novelTypeName'] == novelTypeName:
                 pages = int(novelTypeInfo['pages'])
@@ -72,8 +102,7 @@ class NovelList:
                 return novelInfo
 
 if __name__ == '__main__':
-    novelList = NovelList()
-    a = novelList.one_page_all_novel_under_novel_type_name('玄幻魔法', 1)
-    # a = novelList.all_novel_type_info()
+    novelList = NovelModel()
+    a = novelList.all_novel_type_names()
     print(len(a))
     print(a)
