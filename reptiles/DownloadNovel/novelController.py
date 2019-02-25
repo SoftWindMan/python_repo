@@ -20,7 +20,6 @@ class NovelController:
             newNumber = int(number)
         except ValueError:
             self._novelView.show_msg_page("Incorrect index '{}'".format(number))
-            return False
         else:
             return newNumber
 
@@ -34,6 +33,8 @@ class NovelController:
             novelTypeNameIndex = self._novelView.choice_operate_page()
             if novelTypeNameIndex == 'q' or novelTypeNameIndex == 'Q':  # 退出
                 break
+            # elif novelTypeNameIndex == 'f' or novelTypeNameIndex == 'F':
+            #     novelNameStr = self._novelView.input_novel_name()
             else:  # 选择小说类型
                 pageIndex = 1
                 newNovelTypeNameIndex = self.number_check(novelTypeNameIndex)

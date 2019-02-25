@@ -18,7 +18,12 @@ class NovelView:
         print('*************************************************')
         for novelTypeName in allNovelTypeNames:
             print(novelTypeName)
+        print('【f | F】查找小说')
         print('【q | Q】退出')
+
+    # 输入要查找的小说名
+    def input_novel_name(self):
+        return raw_input(self._colored.red('请输入要查找的小说名：'))
 
     # 选择操作
     def choice_operate_page(self):

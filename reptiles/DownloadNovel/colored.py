@@ -72,6 +72,6 @@ class Colored(object):
 
 if __name__ == '__main__':
     color = Colored()
-    print color.red('I am red!')
-    print color.green('I am gree!')
-    print color.yellow('I am yellow!')
+    print(color.red('I am red!'))
+    print(color.green('I am gree!'))
+    print(color.yellow('I am yellow!'))
