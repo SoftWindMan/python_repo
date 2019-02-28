@@ -49,8 +49,8 @@ class DownloadNovel:
         print('*** 小说【{}】下载完毕！***'.format(self.novelName))
 
 if __name__ == '__main__':
-    baseUrl = 'https://www.x88dushu.com/xiaoshuo/42/42267/'
-    novelName = '官神'
+    baseUrl = 'https://www.x88dushu.com/xiaoshuo/10/10248/'
+    novelName = '黄金瞳'
     novel = DownloadNovel(novelName, baseUrl)
     novel.download_novel()
 

@@ -15,7 +15,7 @@ class NovelController:
         self._novelView.show_novel_type_name_list_page(self._novelModel.all_novel_type_names())
 
     # 数字校验
-    def number_check(self, number):
+    def input_check(self, number):
         try:
             newNumber = int(number)
         except ValueError:
@@ -37,7 +37,7 @@ class NovelController:
             #     novelNameStr = self._novelView.input_novel_name()
             else:  # 选择小说类型
                 pageIndex = 1
-                newNovelTypeNameIndex = self.number_check(novelTypeNameIndex)
+                newNovelTypeNameIndex = self.input_check(novelTypeNameIndex)
                 singleNovels = self._novelModel.single_novels(newNovelTypeNameIndex, pageIndex)
                 while True:
                     self._novelView.show_single_novels_page(singleNovels)
@@ -51,11 +51,11 @@ class NovelController:
                         break
                     elif novelIndex == 's' or novelIndex == 'S':  # 跳转
                         skipPageIndex = self._novelView.input_skip_page_index()
-                        newSkipPageIndex = self.number_check(skipPageIndex)
+                        newSkipPageIndex = self.input_check(skipPageIndex)
                         pageIndex = newSkipPageIndex
                         singleNovels = self._novelModel.single_novels(newNovelTypeNameIndex, newSkipPageIndex)
                     else:  # 下载小说
-                        newNovelIndex = self.number_check(novelIndex)
+                        newNovelIndex = self.input_check(novelIndex)
                         novelName, novelUrl = self._novelModel.one_novel(newNovelTypeNameIndex, pageIndex, newNovelIndex)
                         downloadNovel = DownloadNovel(novelName, novelUrl)
                         downloadNovel.download_novel()
